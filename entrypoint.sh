@@ -33,7 +33,7 @@ chmod 644 "$WPENGINE_SSH_KEY_PUBLIC_PATH"
 mkdir ./wp-content
 
 # Move files into the wp-content folder
-mv plugins/ themes/ ./wp-content/
+mv plugins/ themes/ index.php README.md ./wp-content/
 ls -al
 
 # Git all the things
