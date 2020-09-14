@@ -23,11 +23,24 @@ ssh-keyscan -t rsa "$WPENGINE_HOST" >> "$KNOWN_HOSTS_PATH"
 echo "$WPENGINE_SSH_KEY_PRIVATE" > "$WPENGINE_SSH_KEY_PRIVATE_PATH"
 echo "$WPENGINE_SSH_KEY_PUBLIC" > "$WPENGINE_SSH_KEY_PUBLIC_PATH"
 
+# Update permissions
 chmod 700 "$SSH_PATH"
 chmod 644 "$KNOWN_HOSTS_PATH"
 chmod 600 "$WPENGINE_SSH_KEY_PRIVATE_PATH"
 chmod 644 "$WPENGINE_SSH_KEY_PUBLIC_PATH"
 
+# Check to see if the wp-content directory exists, if not create it
+mkdir ./wp-content
+
+# Move files into the wp-content folder
+mv plugins/ themes/ ./wp-content/
+ls -al
+
+# Git all the things
+git config user.email "actions@github.com"
+git config user.name "Git Actions"
+git add --all
+git commit -am "Deployment to WP Engine"
 git config core.sshCommand "ssh -i $WPENGINE_SSH_KEY_PRIVATE_PATH -o UserKnownHostsFile=$KNOWN_HOSTS_PATH"
 git remote add $WPENGINE_ENV git@$WPENGINE_HOST:$WPENGINE_ENV/$WPENGINE_ENVIRONMENT_NAME.git
 git push -fu $WPENGINE_ENV $BRANCH:master
